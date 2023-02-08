@@ -35,7 +35,7 @@ export class InstaconnectServer {
     public start(): void {
         this.secusityMiddleware(this.app);
         this.standardmiddleware(this.app);
-        this.routeMiddleware(this.app);
+        this.routesMiddleware(this.app);
         this.gobalErrorHandler(this.app);
         this.startServer(this.app);
     }
@@ -45,7 +45,7 @@ export class InstaconnectServer {
             cookieSession({
                 name: 'session',
                 keys: [config.SECRET_KEY_ONE!, config.SECRET_KEY_TWO!],
-                maxAge: 24 * 7 * 3600000,
+                maxAge: 5000,
                 secure: config.NODE_ENV !== 'development',
             })
         );
@@ -67,7 +67,7 @@ export class InstaconnectServer {
         app.use(urlencoded({ extended: true, limit: '50mb' }));
     }
 
-    private routeMiddleware(app: Application): void {
+    private routesMiddleware(app: Application): void {
         applicationRoutes(app);
     }
 
@@ -101,9 +101,9 @@ export class InstaconnectServer {
     private async startServer(app: Application): Promise<void> {
         try {
             const httpServer: http.Server = new http.Server(app);
-            // const socketIO: Server = await this.createSocketIO(httpServer);
+            const socketIO: Server = await this.createSocketIO(httpServer);
             this.startHttpServer(httpServer);
-            // this.socketIOConnections(socketIO);
+            this.socketIOConnections(socketIO);
         } catch (error) {
             log.error(error);
         }
@@ -130,5 +130,8 @@ export class InstaconnectServer {
         });
     }
 
-    //private socketIOConnections(io: Server): void {}
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    private socketIOConnections(io: Server): void {
+        log.info('socketIOConnections');
+    }
 }

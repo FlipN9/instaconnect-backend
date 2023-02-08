@@ -62,7 +62,7 @@ export class SignUp {
             email: Helpers.lowerCase(email),
             password,
             avatarColor,
-            createdAt: new Date()
+            createdAt: new Date(),
         } as IAuthDocument;
     }
 }
